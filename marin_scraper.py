@@ -23,15 +23,9 @@ def get_data(URL):
 
     title = soup.find("h2", {"class": "product_title entry-title"}).get_text()
     price = soup.find("ins").find("span", {"class": "woocommerce-Price-amount amount"}).get_text()
+    to_float = lambda price : (float("".join([x for x in price if x.isdigit()])) / 100)
     title, price = title.strip(), to_float(price)
     return title, price
-
-def to_float(string):
-    result = ""
-    for char in string:
-        if char.isdigit():
-            result += char
-    return "{:.2f}".format(float(result) / 100)
 
 def get_valid_url():
     URL = input("URL: ")
