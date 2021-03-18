@@ -2,14 +2,13 @@ import requests
 from bs4 import BeautifulSoup
 
 def main():
-    title, price = get_data()
-    print(title)
-    print(price)
+    URL = get_valid_url()
+    if URL:
+        title, price = get_data(URL)
+        print(title)
+        print(price)
 
-def get_data():
-    # Will collect URl from user input in the future. This is a test URl
-    URL = "https://marinimport.com.pe/producto/microfonos-condensadores-se-electronics-dm1-mic-pre/"
-
+def get_data(URL):
     # Headers are used to pass as real user and prevent blocks from website
     headers = {
         "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36', 
@@ -33,6 +32,16 @@ def to_float(string):
         if char.isdigit():
             result += char
     return "{:.2f}".format(float(result) / 100)
+
+def get_valid_url():
+    URL = input("URL: ")
+    if URL.startswith("https://marinimport.com.pe/producto/"):
+        return URL
+    if URL.startswith("marinimport.com.pe/producto/"):
+        URL = "https://" + URL
+        return URL
+    print("Not a valid URL from Marin Import")
+    return ""
 
 if __name__ == "__main__":
     main()
