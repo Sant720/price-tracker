@@ -2,14 +2,13 @@ import requests
 from bs4 import BeautifulSoup
 
 def main():
-    title, price = get_data()
-    print(title)
-    print(price)
+    URL = get_valid_url()
+    if URL:
+        title, price = get_data(URL)
+        print(title)
+        print(price)
 
-def get_data():
-    # Will collect URl from user input in the future. This is a test URl
-    URL = "https://www.amazon.com/AKG-Pro-Audio-K92-Closed-Back/dp/B01AIO8XVA/?_encoding=UTF8&pd_rd_w=whu2F&pf_rd_p=49ff6d7e-521c-4ccb-9f0a-35346bfc72eb&pf_rd_r=GE1E8E3KRHC43N354ZY6&pd_rd_r=509d7a96-e005-4c1c-86a0-2862d3a7d031&pd_rd_wg=NLSwX&ref_=pd_gw_ci_mcx_mr_hp_d"
-
+def get_data(URL):
     # Headers are used to pass as real user and prevent blocks from website
     headers = {
         "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36', 
@@ -26,6 +25,17 @@ def get_data():
     price = soup.find(id="priceblock_ourprice").get_text()
     title, price = title.strip(), float(price.strip()[1:])
     return title, price
+
+def get_valid_url():
+    URL = input("URL: ")
+    valid_urls = {
+        "https://marinimport.com.pe/producto/",
+        "https://www.amazon.com/"
+    }
+    if any([URL.startswith(x) for x in valid_urls]):
+        return URL
+    print("Not a valid URL. Please check the URL!")
+    return ""
 
 if __name__ == "__main__":
     main()
